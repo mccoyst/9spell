@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"index/suffixarray"
+	"unicode"
 )
 
 func main() {
@@ -39,7 +39,7 @@ func check(file string) {
 	in := bufio.NewReader(f)
 	n := 1
 	for {
-		line, err := in.ReadSlice('\n')
+		line, err := in.ReadString('\n')
 		if err == io.EOF && len(line) == 0 {
 			break
 		} else if err != nil && err != io.EOF {
@@ -47,12 +47,9 @@ func check(file string) {
 			break
 		}
 
-		//BUG(mccoyst): This finds typos within word boundaries. E.g. "bufio" matches
-		// "bufio" and "io".
-		index := suffixarray.New(line)
-		for typo := range typos {
-			if len(index.Lookup([]byte(typo), 1)) == 1 {
-				fmt.Printf("%s:%d: %s\n", file, n, typo)
+		for _, w := range strings.FieldsFunc(strings.TrimSpace(line), isWordSep) {
+			if typos[w] {
+				fmt.Printf("%s:%d: %s\n", file, n, w)
 			}
 		}
 		n++
@@ -93,4 +90,8 @@ func findTypos(file string) map[string]bool {
 	}
 
 	return typos
+}
+
+func isWordSep(r rune) bool {
+	return r != '.' && !unicode.IsLetter(r)
 }
