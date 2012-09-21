@@ -40,10 +40,9 @@ func check(file string) {
 	n := 1
 	for {
 		line, err := in.ReadSlice('\n')
-		if err == io.EOF {
-			//BUG(mccoyst): Be sure to get the last line on early EOF
+		if err == io.EOF && len(line) == 0 {
 			break
-		} else if err != nil {
+		} else if err != nil && err != io.EOF {
 			fmt.Fprintf(os.Stderr, "Problem reading %q: %v\n", file, err)
 			break
 		}
