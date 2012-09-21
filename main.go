@@ -57,7 +57,34 @@ func check(file string) {
 }
 
 func findTypos(file string) map[string]bool {
-	spell := exec.Command("9", "spell", file)
+	spell := exec.Command("9", "spell")
+
+	if strings.HasSuffix(file, ".tex") {
+		detex := exec.Command("9", "delatex", file)
+		o, err := detex.StdoutPipe()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Problem piping 9 delatex: %v\n", err)
+			return nil
+		}
+		spell.Stdin = o
+
+		err = detex.Start()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Problem starting 9 delatex: %v\n", err)
+			return nil
+		}
+	} else {
+		f, err := os.Open(file)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Could not open %q: %v\n", file, err)
+			return nil
+		}
+		defer f.Close()
+
+		spell.Stdin = f
+
+	}
+
 	o, err := spell.StdoutPipe()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Problem piping 9 spell: %v\n", err)
