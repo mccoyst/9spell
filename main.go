@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/mccoyst/cmdchain"
+	"github.com/mccoyst/pipeline"
 )
 
 func main() {
@@ -59,15 +59,15 @@ func check(file string) {
 }
 
 func findTypos(file string) map[string]bool {
-	var cmds cmdchain.Chain
+	var cmds pipeline.P
 	var err error
 
 	if strings.HasSuffix(file, ".tex") {
-		cmds, err = cmdchain.New(
+		cmds, err = pipeline.New(
 			exec.Command("9", "delatex", file),
 			exec.Command("9", "spell"))
 	} else {
-		cmds, err = cmdchain.New(exec.Command("9", "spell", file))
+		cmds, err = pipeline.New(exec.Command("9", "spell", file))
 	}
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Problem creating commands: %v\n", err)
