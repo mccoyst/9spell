@@ -61,7 +61,7 @@ func check(file string) {
 			break
 		}
 
-		for _, w := range strings.FieldsFunc(strings.TrimSpace(line), isWordSep) {
+		for _, w := range strings.FieldsFunc(trim(line), isWordSep) {
 			if typos[w] {
 				fmt.Printf("%s:%d:/%s/\n", file, n, w)
 			}
@@ -102,13 +102,13 @@ func findTypos(file string) map[string]bool {
 	for {
 		typo, err := out.ReadString('\n')
 		if err == io.EOF {
-			typos[strings.TrimSpace(typo)] = true
+			typos[trim(typo)] = true
 			break
 		} else if err != nil {
 			fmt.Fprintf(os.Stderr, "Problem reading 9 spell output: %v\n", err)
 			break
 		}
-		typos[strings.TrimSpace(typo)] = true
+		typos[trim(typo)] = true
 	}
 
 	errs := cmds.Wait()
@@ -119,6 +119,8 @@ func findTypos(file string) map[string]bool {
 
 	return typos
 }
+
+var trim = strings.TrimSpace
 
 func isWordSep(r rune) bool {
 	return r != '.' && !unicode.IsLetter(r)
