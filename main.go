@@ -3,11 +3,11 @@
 /*
 The 9spell command runs the plan9port "9 spell" program on each
 of the files supplied as arguments. It prints output like:
-	file0:45: teh
-	file0:64: frgo
-	file1:3: fner
+	file0:45:/teh/
+	file0:64:/frgo/
+	file1:3:/fner/
 A program such as acme can read those addresses and navigate
-to the line with the misspelled word.
+to the misspelled word.
 
 If a filename ends in ".tex", that file is piped through the plan9port
 "9 detex" program before "9 spell".
@@ -63,7 +63,7 @@ func check(file string) {
 
 		for _, w := range strings.FieldsFunc(strings.TrimSpace(line), isWordSep) {
 			if typos[w] {
-				fmt.Printf("%s:%d: %s\n", file, n, w)
+				fmt.Printf("%s:%d:/%s/\n", file, n, w)
 			}
 		}
 		n++
