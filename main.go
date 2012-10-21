@@ -1,5 +1,14 @@
 // © 2012 Steve McCoy. Available under the MIT license.
 
+/*
+The 9spell command runs the plan9port "9 spell" program on each
+of the files supplied as arguments. It prints output like:
+	file0:45: teh
+	file0:64: frgo
+	file1:3: fner
+A program such as acme can read those addresses and navigate
+to the line with the misspelled word.
+*/
 package main
 
 import (
