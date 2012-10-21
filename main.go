@@ -101,14 +101,13 @@ func findTypos(file string) map[string]bool {
 	}
 	for {
 		typo, err := out.ReadString('\n')
+		typos[trim(typo)] = true
 		if err == io.EOF {
-			typos[trim(typo)] = true
 			break
 		} else if err != nil {
 			fmt.Fprintf(os.Stderr, "Problem reading 9 spell output: %v\n", err)
 			break
 		}
-		typos[trim(typo)] = true
 	}
 
 	errs := cmds.Wait()
