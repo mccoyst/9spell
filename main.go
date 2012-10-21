@@ -8,6 +8,9 @@ of the files supplied as arguments. It prints output like:
 	file1:3: fner
 A program such as acme can read those addresses and navigate
 to the line with the misspelled word.
+
+If a filename ends in ".tex", that file is piped through the plan9port
+"9 detex" program before "9 spell".
 */
 package main
 
