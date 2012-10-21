@@ -7,18 +7,18 @@ import (
 )
 
 func TestIsWordSep(t *testing.T) {
-	tests := []struct{
-		r rune
+	tests := []struct {
+		r  rune
 		ok bool
 	}{
-		{ '.', false },
-		{ 'a', false },
-		{ '(', true },
-		{ ']', true },
-		{ '$', true },
-		{ '©', true },
-		{ '*', true },
-		{ 'ß', false },
+		{'.', false},
+		{'a', false},
+		{'(', true},
+		{']', true},
+		{'$', true},
+		{'©', true},
+		{'*', true},
+		{'ß', false},
 	}
 
 	for _, test := range tests {
