@@ -145,6 +145,7 @@ func readExtra() {
 		fmt.Fprintf(os.Stderr, "I failed to open the extra dictionary: %v\n", err)
 		os.Exit(1)
 	}
+	defer f.Close()
 
 	in := bufio.NewReader(f)
 	for {
