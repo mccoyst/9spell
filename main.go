@@ -27,6 +27,9 @@ import (
 	"github.com/mccoyst/pipeline"
 )
 
+var extraDict = flag.String("d", "", "a file containing a supplementary dictionary, one word per line")
+var ignored = map[string]bool{}
+
 func main() {
 	flag.Parse()
 
@@ -34,6 +37,10 @@ func main() {
 	if len(files) == 0 {
 		os.Stderr.WriteString("I need the names of files to check.\n")
 		os.Exit(1)
+	}
+
+	if *extraDict != "" {
+		readExtra()
 	}
 
 	for _, file := range files {
@@ -105,7 +112,10 @@ func findTypos(file string) map[string]bool {
 	}
 	for {
 		typo, err := out.ReadString('\n')
-		typos[trim(typo)] = true
+		typo = trim(typo)
+		if !ignored[typo] {
+			typos[typo] = true
+		}
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -127,4 +137,24 @@ var trim = strings.TrimSpace
 
 func isWordSep(r rune) bool {
 	return r != '.' && !unicode.IsLetter(r)
+}
+
+func readExtra() {
+	f, err := os.Open(*extraDict)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "I failed to open the extra dictionary: %v\n", err)
+		os.Exit(1)
+	}
+
+	in := bufio.NewReader(f)
+	for {
+		word, err := in.ReadString('\n')
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Fprintf(os.Stderr, "Problem reading extra dictionary: %v\n", err)
+			break
+		}
+		ignored[trim(word)] = true
+	}
 }
