@@ -16,6 +16,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -27,12 +28,15 @@ import (
 )
 
 func main() {
-	if len(os.Args) <= 1 {
+	flag.Parse()
+
+	files := flag.Args()
+	if len(files) == 0 {
 		os.Stderr.WriteString("I need the names of files to check.\n")
 		os.Exit(1)
 	}
 
-	for _, file := range os.Args[1:] {
+	for _, file := range files {
 		check(file)
 	}
 }
