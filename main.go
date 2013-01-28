@@ -33,8 +33,7 @@ var ignored = map[string]bool{}
 func main() {
 	flag.Parse()
 
-	files := flag.Args()
-	if len(files) == 0 {
+	if flag.NArg() == 0 {
 		os.Stderr.WriteString("I need the names of files to check.\n")
 		os.Exit(1)
 	}
@@ -43,7 +42,7 @@ func main() {
 		readExtra()
 	}
 
-	for _, file := range files {
+	for _, file := range flag.Args() {
 		check(file)
 	}
 }
