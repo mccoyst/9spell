@@ -149,12 +149,12 @@ func readExtra() {
 	in := bufio.NewReader(f)
 	for {
 		word, err := in.ReadString('\n')
+		ignored[trim(word)] = true
 		if err == io.EOF {
 			break
 		} else if err != nil {
 			fmt.Fprintf(os.Stderr, "Problem reading extra dictionary: %v\n", err)
 			break
 		}
-		ignored[trim(word)] = true
 	}
 }
