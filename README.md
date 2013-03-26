@@ -1,9 +1,9 @@
 The 9spell command runs the plan9port "9 spell" program on each
 of the files supplied as arguments. It prints output like:
 
-	file0:44+/teh/
-	file0:63+/frgo/
-	file1:0+/fner/
+	file_a:44+/teh/
+	file_a:63+/frgo/
+	file_b:0+/fner/
 
 A program such as acme can read those addresses and navigate
 to the misspelled word.
